@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Weather</title>
+</head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script>
+    // API key - 7ad7418303dd0478be731d321c108970
+    var str = "";
+    var weatherApi = {};
+    function gettingJSON(city){
+        document.write("");
+            $.getJSON("https://api.openweathermap.org/data/2.5/weather?q=" + city.value + "&appid=7ad7418303dd0478be731d321c108970", function (json) {
+                weatherApi = json;
+                document.write("<h3>" + weatherApi.name + "</h3>");
+                var body = document.getElementsByTagName("body");
+                var img = document.createElement("img");
+                img.src = "https://openweathermap.org/img/w/" + weatherApi.weather[0].icon + ".png";
+                body[0].appendChild(img);
+                document.write("\t" + weatherApi.weather[0].description);
+                document.write("<p>Текущая температура &mdash; " + Math.round(weatherApi.main.temp - 273) + " &deg;C");
+                document.write("<p>Максимальная температура &mdash; " + Math.round(weatherApi.main.temp_max - 273) + " &deg;C");
+                document.write("<p>Минимальная температура &mdash; " + Math.round(weatherApi.main.temp_min - 273) + " &deg;C");
+                document.write("<p>Влажность &mdash; " + weatherApi.main.humidity + " %");
+                document.write("<p>Давление &mdash; " + weatherApi.main.pressure + " гПа");
+                document.write("<p>Скорость ветра &mdash; " + weatherApi.wind.speed + " м/с");
+
+                var sunrise1 = new Date(weatherApi.sys.sunrise * 1000);
+                var sunset1 = new Date(weatherApi.sys.sunset * 1000);
+
+                document.write("<p>Восход &mdash; " + sunrise1.getHours() + ":" + sunrise1.getMinutes());
+                document.write("<p>Закат &mdash; " + sunset1.getHours() + ":" + sunset1.getMinutes());
+
+            });
+    }
+</script>
+<style>
+    p {
+        font-weight: bold;
+    }
+</style>
+<body>
+<form>
+    <input type="text" name="city" placeholder="Enter city">
+    <button id = "getIt" onclick = "gettingJSON(city)">GO</button>
+</form>
+</body>
+</html>
